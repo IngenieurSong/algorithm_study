@@ -1,62 +1,63 @@
-import sys
 from collections import deque
-input = sys.stdin.readline
 
 n = int(input())
-graph = [list(map(str, input())) for _ in range(n)]
-vector = [(1, 0), (0, -1), (0, 1), (-1, 0)]
+board = [list(map(str, input())) for _ in range(n)]
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-def bfs_1(x, y, graph, visited):
-    queue = deque([])
+def bfs(x, y, visited):
+    queue = deque([(x, y)])
     visited[x][y] = 1
-    queue.append((x, y))
 
-    while(queue):
+    while queue:
         x, y = queue.popleft()
 
-        for i in vector:
-            nx = x + i[0]
-            ny = y + i[1]
+        for nx, ny in vector:
+            nx = x + nx
+            ny = y + ny
 
-            if(0 <= nx < n and 0 <= ny < n and graph[nx][ny] == graph[x][y] and not visited[nx][ny]):
+            if(nx < 0 or nx >= n or ny < 0 or ny >= n):
+                continue
+            if(board[x][y] == board[nx][ny] and not visited[nx][ny]):
                 visited[nx][ny] = 1
                 queue.append((nx, ny))
 
-def bfs_2(x, y, graph, visited):
-    queue = deque([])
-    visited[x][y] = 1
-    queue.append((x, y))
+def bfs_RGB(x, y, visited_RGB):
+    queue = deque([(x, y)])
+    visited_RGB[x][y] = 1
 
-    while(queue):
+    if(board[x][y] in ['R', 'G']):
+        target_color = ['R', 'G']
+    else:
+        target_color = ['B']
+
+    while queue:
         x, y = queue.popleft()
 
-        for i in vector:
-            nx = x + i[0]
-            ny = y + i[1]
+        for nx, ny in vector:
+            nx = x + nx
+            ny = y + ny
 
-            if(0 <= nx < n and 0 <= ny < n and not visited[nx][ny]):
-                if(graph[x][y] in ['R', 'G'] and graph[nx][ny] in ['R', 'G']):
-                    visited[nx][ny] = 1
-                    queue.append((nx, ny))
-                elif(graph[x][y] in ['B'] and graph[nx][ny] in ['B']):
-                    visited[nx][ny] = 1
-                    queue.append((nx, ny))
+            if(nx < 0 or nx >= n or ny < 0 or ny >= n):
+                continue
+            if(not visited_RGB[nx][ny] and board[nx][ny] in target_color):
+                visited_RGB[nx][ny] = 1
+                queue.append((nx, ny))
 
-visited1 = [[0] * n for _ in range(n)]
-visited2 = [[0] * n for _ in range(n)]
-count1 = 0
-count2 = 0
+count = 0
+count_RGB = 0
+
+visited = [[0] * n for _ in range(n)]
+visited_RGB = [[0] * n for _ in range(n)]
+for i in range(n):
+    for j in range(n):
+        if(not visited[i][j]):
+            bfs(i, j, visited)
+            count += 1
 
 for i in range(n):
     for j in range(n):
-        if(visited1[i][j] == 0):
-            bfs_1(i, j, graph, visited1)
-            count1 += 1
+        if(not visited_RGB[i][j]):
+            bfs_RGB(i, j, visited_RGB)
+            count_RGB += 1
 
-for i in range(n):
-    for j in range(n):
-        if(visited2[i][j] == 0):
-            bfs_2(i, j, graph, visited2)
-            count2 += 1
-
-print(count1, count2)
+print(count, count_RGB)
