@@ -1,45 +1,38 @@
-import sys
 from collections import deque
 
-input = sys.stdin.readline
+def bfs(start, graph, visited_bfs):
+    queue = deque([start])
+    visited_bfs[start] = 1
 
-def dfs(v, graph, visited):
-    visited[v] = 1
-    graph[v].sort()
-    print(v, end = " ")
+    while queue:
+        node = queue.popleft()
+        print(node, end = ' ')
 
-    for i in graph[v]:
-        if(not visited[i]):
-            dfs(i, graph, visited_d)
-
-def bfs(v, graph, visited):
-    queue = deque([v])
-    visited[v] = 1
-
-    while(queue):
-        v = queue.popleft()
-        print(v, end = " ")
-        graph[v].sort()
-
-        for i in graph[v]:
-            if(not visited[i]):
+        for i in sorted(graph[node]):
+            if(not visited_bfs[i]):
+                visited_bfs[i] = 1
                 queue.append(i)
-                visited[i] = 1
+
+def dfs(node, graph, visited_dfs):
+    visited_dfs[node] = 1
+    print(node, end = ' ')
+
+    for i in sorted(graph[node]):
+        if(not visited_dfs[i]):
+            visited_dfs[i] = 1
+            dfs(i, graph, visited_dfs)
 
 n, m, v = map(int, input().split())
-graph = list([] for _ in range(n + 1))
+graph = [[] for _ in range(n + 1)]
 
 for _ in range(m):
     a, b = map(int, input().split())
     graph[a].append(b)
     graph[b].append(a)
 
-for i in range(1, n + 1):
-    graph[i].sort()
+visited_bfs = [0] * (n + 1)
+visited_dfs = [0] * (n + 1)
 
-visited_d = [0] * (n + 1)
-visited_b = [0] * (n + 1)
-
-dfs(v, graph, visited_d)
+dfs(v, graph, visited_dfs)
 print()
-bfs(v, graph, visited_b)
+bfs(v, graph, visited_bfs)
