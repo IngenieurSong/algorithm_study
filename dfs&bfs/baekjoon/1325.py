@@ -2,35 +2,37 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
-graph = [[] for _ in range(n + 1)]
-
-for _ in range(m):
-    a, b = map(int, input().split())
-    graph[b].append(a)
 
 def bfs(start, graph, visited):
-    count = 1
-    queue = deque([])
+    queue = deque([start])
     visited[start] = 1
-    queue.append(start)
+    count = 0
 
-    while(queue):
+    while queue:
         node = queue.popleft()
 
         for i in graph[node]:
             if(not visited[i]):
+                count += 1
                 visited[i] = 1
                 queue.append(i)
-                count += 1
 
     return count
 
-compare = [0] * (n + 1)
-for i in range(1, n + 1, 1):
-    visited = [0] * (n + 1)
-    compare[i] = bfs(i, graph, visited)
+n, m = map(int, input().split())
+graph = [[] for _ in range(n + 1)]
+
+for _ in range(m):
+    start, end = map(int, input().split())
+    graph[end].append(start)
+
+result_list = [0]
 
 for i in range(1, n + 1, 1):
-    if(compare[i] == max(compare)):
-        print(i, end = " ")
+    visited = [0] * (n + 1)
+    result_list.append(bfs(i, graph, visited))
+
+comp_num = max(result_list)
+for i in range(1, n + 1, 1):
+    if(comp_num == result_list[i]):
+        print(i, end = ' ')
