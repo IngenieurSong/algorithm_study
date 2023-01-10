@@ -1,39 +1,39 @@
-import sys
 from collections import deque
-input = sys.stdin.readline
 
 t = int(input())
-vector = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-def bfs(x, y, graph):
-    queue = deque([])
-    graph[x][y] = 2
-    queue.append((x, y))
+def bfs(x, y, visited):
+    queue = deque([(x, y)])
+    visited[x][y] = 1
 
-    while(queue):
+    while queue:
         x, y = queue.popleft()
 
-        for i in vector:
-            nx = x + i[0]
-            ny = y + i[1]
+        for nx, ny in vector:
+            nx = x + nx
+            ny = y + ny
 
-            if(0 <= nx < m and 0 <= ny < n and graph[nx][ny] == 1):
-                graph[nx][ny] = 2
+            if(nx < 0 or nx >= n or ny < 0 or ny >= m):
+                continue
+            if(not visited[nx][ny] and board[nx][ny]):
+                visited[nx][ny] = 1
                 queue.append((nx, ny))
 
 for _ in range(t):
-    m, n, k = map(int, input().split())
-    graph = [[0] * n for _ in range(m)]
+    n, m, k = map(int, input().split())
+    board = [[0] * m for _ in range(n)]
+    visited = [[0] * m for _ in range(n)]
     count = 0
 
     for _ in range(k):
         x, y = map(int, input().split())
-        graph[x][y] = 1
+        board[x][y] = 1
 
-    for i in range(m):
-        for j in range(n):
-            if(graph[i][j] == 1):
-                bfs(i, j, graph)
+    for i in range(n):
+        for j in range(m):
+            if(not visited[i][j] and board[i][j]):
+                bfs(i, j, visited)
                 count += 1
 
     print(count)
