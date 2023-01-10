@@ -1,27 +1,24 @@
 from collections import deque
 
 n, m = map(int, input().split())
-graph = [list(map(int, input())) for _ in range(n)]
+board = [list(map(int, input())) for _ in range(n)]
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 def bfs(x, y, graph):
     queue = deque([(x, y)])
-    stride = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
     while queue:
         x, y = queue.popleft()
 
-        for nx, ny in stride:
+        for nx, ny in vector:
             nx = x + nx
             ny = y + ny
 
-            if(nx <= -1 or nx >= n or ny <= -1 or ny >= m):
-                continue
-            if(graph[nx][ny] == 0):
+            if(0 > nx or nx >= n or 0 > ny or ny >= m):
                 continue
             if(graph[nx][ny] == 1):
                 graph[nx][ny] = graph[x][y] + 1
                 queue.append((nx, ny))
 
-    return graph[n - 1][m - 1]
-
-print(bfs(0, 0, graph))
+bfs(0, 0, board)
+print(board[n - 1][m - 1])
