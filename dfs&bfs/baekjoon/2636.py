@@ -45,3 +45,54 @@ while(exit):
 
 print(count)
 print(ch_count)
+  
+# 풀이 2
+from collections import deque
+
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+def bfs(x, y, graph, visited):
+    queue = deque([(x, y)])
+    visited[x][y] = 1
+    count_cheese = 0
+
+    while queue:
+        x, y = queue.popleft()
+
+        for nx, ny in vector:
+            nx = x + nx
+            ny = y + ny
+
+            if(nx < 0 or nx >= n or ny < 0 or ny >= m):
+                continue
+            if(not visited[nx][ny]):
+                if(graph[nx][ny] == 0):
+                    visited[nx][ny] = 1
+                    queue.append((nx, ny))
+                elif(graph[nx][ny]):
+                    visited[nx][ny] = 1
+                    graph[nx][ny] = 0
+                    count_cheese += 1
+
+    return count_cheese
+
+count_cheese = []
+
+def main(n, m, board):
+    count = 0
+    for i in range(n):
+        for j in range(m):
+            visited = [[0] * m for _ in range(n)]
+            if(not visited[i][j] and board[i][j] == 0):
+                count_cheese.append(bfs(i, j, board, visited))
+
+                if(count_cheese[-1] == 0):
+                    print(count)
+                    print(count_cheese[-2])
+                    return 0
+                count += 1
+
+n, m = map(int, input().split())
+board = [list(map(int, input().split())) for _ in range(n)]
+
+main(n, m, board)
