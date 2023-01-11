@@ -1,44 +1,45 @@
 from collections import deque
-import sys
-input = sys.stdin.readline
 
 n = int(input())
-graph = [list(map(int, input().split())) for _ in range(n)]
-vector = [(1, 0), (0, -1), (0, 1), (-1, 0)]
-result = -float("inf")
+board = [list(map(int, input().split())) for _ in range(n)]
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-def bfs(x, y, visited):
-    queue = deque([])
-    queue.append((x, y))
+def rain(height, visited):
+    for i in range(n):
+        for j in range(n):
+            if(board[i][j] <= height):
+                visited[i][j] = 1
 
-    while(queue):
+def bfs(x, y, graph, visited):
+    queue = deque([(x, y)])
+    visited[x][y] = 1
+
+    while queue:
         x, y = queue.popleft()
 
-        for i in vector:
-            nx = x + i[0]
-            ny = y + i[1]
+        for nx, ny in vector:
+            nx = x + nx
+            ny = y + ny
 
-            if(0 <= nx < n and 0 <= ny < n and not visited[nx][ny]):
-                visited[nx][ny] = 1
+            if(nx < 0 or nx >= n or ny < 0 or ny >= n):
+                continue
+            if(graph[nx][ny] != 0 and not visited[nx][ny]):
                 queue.append((nx, ny))
+                visited[nx][ny] = 1
 
-for i in range(101):
-    visited = [[0] * n for _ in range(n)]
+count_list = [1]
+count = 1
+while count:
     count = 0
+    visited = [[0] * n for _ in range(n)]
+    rain(len(count_list), visited)
 
-    for j in range(n):
-        for k in range(n):
-            if(graph[j][k] <= i):
-                visited[j][k] = 1
-
-    for j in range(n):
-        for k in range(n):
-            if(visited[j][k] == 0):
-                bfs(j, k, visited)
+    for i in range(n):
+        for j in range(n):
+            if(board[i][j] and not visited[i][j]):
                 count += 1
+                bfs(i, j, board, visited)
 
-    if(count == 0):
-        print(result)
-        break
+    count_list.append(count)
 
-    result = max(result, count)
+print(max(count_list))
