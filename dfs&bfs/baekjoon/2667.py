@@ -1,37 +1,37 @@
 from collections import deque
 
 n = int(input())
-graph = [list(map(int, input())) for _ in range(n)]
-stride = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+board = [list(map(int, input())) for _ in range(n)]
+count = []
+vector = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+visited = [[0] * n for _ in range(n)]
 
-def bfs(x, y, graph):
+def bfs(x, y, graph, visited):
     queue = deque([(x, y)])
-    graph[x][y] = 0
-    count = 1
+    visited[x][y] = 1
+    house = 1
 
     while queue:
         x, y = queue.popleft()
 
-        for nx, ny in stride:
+        for nx, ny in vector:
             nx = x + nx
             ny = y + ny
 
-            if(nx <= -1 or nx >= n or ny <= -1 or ny >= n):
+            if(nx < 0 or nx >= n or ny < 0 or ny >= n):
                 continue
-            if(graph[nx][ny] == 0):
-                continue
-            graph[nx][ny] = 0
-            count += 1
-            queue.append((nx, ny))
+            if(graph[nx][ny] == 1 and not visited[nx][ny]):
+                house += 1
+                visited[nx][ny] = 1
+                queue.append((nx, ny))
 
-    return count
+    return house
 
-result = []
 for i in range(n):
     for j in range(n):
-        if(graph[i][j]):
-            result.append(bfs(i, j, graph))
+        if(board[i][j] == 1 and not visited[i][j]):
+            count.append(bfs(i, j, board, visited))
 
-print(len(result))
-for i in sorted(result):
+print(len(count))
+for i in sorted(count):
     print(i)
