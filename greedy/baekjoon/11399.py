@@ -1,9 +1,8 @@
 n = int(input())
-time_list = sorted(list(map(int, input().split())))
-sum = 0
+board = sorted(list(map(int ,input().split())))
+result = 0
 
-for i in range(1, n + 1, 1):
-    for j in range(0, i, 1):
-        sum += time_list[j]
+for i in range(n):
+    result += sum(board[0:i + 1])
 
-print(sum)
+print(result)
