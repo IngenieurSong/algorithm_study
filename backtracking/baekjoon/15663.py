@@ -1,28 +1,27 @@
 import sys
 input = sys.stdin.readline
 
-def bt(height):
-    if(height == m):
-        string = ' '.join(result)
+n, m = map(int, input().split())
+result = []
+visited = [0] * (n + 1)
+board = sorted(list(map(int, input().split())))
+result_dict = {}
 
-        if string not in dictionary:
-            dictionary[string] = 1
-            print(string)
+def bt(height):
+    global n, m
+
+    if(height == m):
+        if(result_dict.get(' '.join(result)) == None):
+            result_dict[' '.join(result)] = 1
+            print(' '.join(result))
         return
 
     for i in range(n):
-        if(visited[i] == 1):
-            continue
-        result.append(str(board[i]))
-        visited[i] = 1
-        bt(height + 1)
-        result.pop()
-        visited[i] = 0
+            if(not visited[i]):
+                visited[i] = 1
+                result.append(str(board[i]))
+                bt(height + 1)
+                visited[i] = 0
+                result.pop()
 
-n, m = map(int, input().split())
-board = list(map(int, input().split()))
-board.sort()
-dictionary = {}
-result = []
-visited = [0] * n
 bt(0)
