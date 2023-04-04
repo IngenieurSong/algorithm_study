@@ -1,4 +1,4 @@
-def strToList(s):
+def str_to_list(s):
     board = []
     s = s[2:-2].split("},{")
 
@@ -9,7 +9,7 @@ def strToList(s):
 
 def solution(s):
     answer = []
-    board = strToList(s)
+    board = str_to_list(s)
     board.sort(key = lambda x : len(x))
 
     for target in board:
