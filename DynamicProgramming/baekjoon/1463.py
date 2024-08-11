@@ -1,5 +1,6 @@
 n = int(input())
 cache = [int(1e9)] * (n + 1)
+cache[n] = 0
 
 for i in range(n, 0, -1):
     if(n % 3 == 0):
