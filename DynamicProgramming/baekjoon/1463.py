@@ -1,12 +1,12 @@
 n = int(input())
-cache = [float("inf")] * (n + 1)
-cache[1] = 0
+cache = [int(1e9)] * (n + 1)
 
-for i in range(2, n + 1, 1):
-    if(i % 3 == 0):
-        cache[i] = min(cache[i], cache[i // 3] + 1)
-    if(i % 2 == 0):
-        cache[i] = min(cache[i], cache[i // 2] + 1)
-    cache[i] = min(cache[i], cache[i - 1] + 1)
+for i in range(n, 0, -1):
+    if(n % 3 == 0):
+        cache[i // 3] = min(cache[i // 3], cache[i] + 1)
+    if(n % 2 == 0):
+        cache[i // 2] = min(cache[i // 2], cache[i] + 1)
+    if(i > 0):
+        cache[i - 1] = min(cache[i - 1], cache[i] + 1)
 
-print(cache[n])
+print(cache[1])
