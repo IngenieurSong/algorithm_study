@@ -1,13 +1,11 @@
 t = int(input())
-n_list = []
-for _ in range(t):
-    n_list.append(int(input()))
 
-for i in n_list:
-    cache = [0, 1, 2, 4] * 5
-    if(i < 3):
-        print(cache[i])
-    else:
-        for j in range(4, i + 1, 1):
-            cache[j] = cache[j - 3] + cache[j - 2] + cache[j - 1]
-        print(cache[i])
+for _ in range(t):
+    n = int(input())
+    cache = [i for i in range(n + 1)]
+    cache[0] = 1
+
+    for i in range(3, n + 1, 1):
+        cache[i] = cache[i - 1] + cache[i - 2] + cache[i - 3]
+
+    print(cache[n])
