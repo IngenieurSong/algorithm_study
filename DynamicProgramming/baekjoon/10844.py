@@ -13,4 +13,4 @@ for i in range(2, n + 1, 1):
         else:
             cache[i][j] = cache[i - 1][j - 1] + cache[i - 1][j + 1]
 
-print(sum(cache[n]))
+print(sum(cache[n]) % 1000000000)
