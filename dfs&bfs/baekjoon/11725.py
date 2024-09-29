@@ -1,21 +1,29 @@
-import sys
-sys.setrecursionlimit(1000000)
+from collections import deque
 
 n = int(input())
 graph = [[] for _ in range(n + 1)]
-parent = [0 for _ in range(n + 1)]
 
 for _ in range(n - 1):
-    node1, node2 = map(int, input().split())
-    graph[node1].append(node2)
-    graph[node2].append(node1)
+    u, v = map(int, input().split())
+    graph[u].append(v)
+    graph[v].append(u)
 
-def dfs(v, graph, parent):
-    for i in graph[v]:
-        if(parent[i] == 0):
-            parent[i] = v
-            dfs(i, graph, parent)
+def bfs(start, graph):
+    queue = deque([start])
+    parent = [i for i in range(n + 1)]
+    parent[start] = start
 
-dfs(1, graph, parent)
+    while queue:
+        node = queue.popleft()
+
+        for i in graph[node]:
+            if parent[i] == i:
+                parent[i] = node
+                queue.append(i)
+
+    return parent
+
+parent = bfs(1, graph)
+
 for i in range(2, n + 1, 1):
     print(parent[i])
