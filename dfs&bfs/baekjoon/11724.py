@@ -1,23 +1,24 @@
 import sys
+
 input = sys.stdin.readline
+
+def find_parent(parent, node):
+    if parent[node] != node:
+        parent[node] = find_parent(parent, parent[node])
+
+    return parent[node]
+
+def union_parent(parent, node1, node2):
+    parent1 = find_parent(parent, node1)
+    parent2 = find_parent(parent, node2)
+
+    if parent1 < parent2:
+        parent[parent2] = parent1
+    else:
+        parent[parent1] = parent2
 
 n, m = map(int, input().split())
 parent = [i for i in range(n + 1)]
-
-def find_parent(parent, x):
-    if(parent[x] != x):
-        parent[x] = find_parent(parent, parent[x])
-
-    return parent[x]
-
-def union_parent(parent, a, b):
-    a = find_parent(parent, a)
-    b = find_parent(parent, b)
-
-    if(a < b):
-        parent[b] = a
-    else:
-        parent[a] = b
 
 for _ in range(m):
     u, v = map(int, input().split())
