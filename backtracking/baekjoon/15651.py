@@ -1,11 +1,10 @@
-import sys
-input = sys.stdin.readline
-
 n, m = map(int, input().split())
 result = []
 
 def bt(height):
-    if(height == m):
+    global n, m
+
+    if height == m:
         print(' '.join(result))
         return
 
