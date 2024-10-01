@@ -1,24 +1,21 @@
-import sys
-input = sys.stdin.readline
-
 n, m = map(int, input().split())
-visited = [0] * n
 result = []
+visited = [0] * n
 board = sorted(list(map(int, input().split())))
 
 def bt(height):
     global n, m
 
-    if(height == m):
+    if height == m:
         print(' '.join(result))
         return
 
-    for i in range(n):
-        if(not visited[i]):
-            visited[i] = 1
-            result.append(str(board[i]))
+    for idx, i in enumerate(board):
+        if not visited[idx]:
+            visited[idx] = 1
+            result.append(str(i))
             bt(height + 1)
-            visited[i] = 0
+            visited[idx] = 0
             result.pop()
 
 bt(0)
