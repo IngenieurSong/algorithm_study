@@ -1,13 +1,10 @@
 n = int(input())
-board = [0] + list(map(int, input().split()))
-cache = [0] * (n + 1)
-cache[1] = board[1]
+board = list(map(int, input().split()))
+cache = [i for i in board]
 
-for i in range(2, n + 1, 1):
-    for j in range(1, i, 1):
-        if(board[i] > board[j]):
+for i in range(1, n, 1):
+    for j in range(i):
+        if (board[i] > board[j]):
             cache[i] = max(cache[i], cache[j] + board[i])
-        else:
-            cache[i] = max(cache[i], board[i])
 
 print(max(cache))
